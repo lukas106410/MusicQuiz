@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Musik Quiz – Spotify</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <div>
+      <div class="title">
+        Musik Quiz
+        <span class="pill">Spotify · Prototyp</span>
+      </div>
+      <div class="subtitle">Ein Device · Noob/Pro-Modus · Zettel-Antworten</div>
+    </div>
+
+    <!-- Witzige Badges -->
+    <div class="fun-badges">
+      <div class="fun-badge">🎤 Schreien erlaubt</div>
+      <div class="fun-badge">🧻 Zettelpflicht</div>
+      <div class="fun-badge">🎧 Spotify entscheidet dein Schicksal</div>
+      <div class="fun-badge">😵‍💫 Einfach raten!</div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- LINKER BLOCK: LOGIN / PLAYLIST / PLAYER / MODUS -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Spotify & Steuerung</div>
+          <div class="card-tag">1. Login · 2. Playlist · 3. Player · 4. Runde</div>
+        </div>
+        <div class="badge">
+          <span id="playerStatusDot" class="badge-dot"></span>
+          <span id="playerStatusText">Player nicht verbunden</span>
+        </div>
+      </div>
+
+      <!-- Login -->
+      <div class="row row-wrap">
+        <button id="btnLogin" class="btn btn-primary">Mit Spotify verbinden</button>
+        <button id="btnLogout" class="btn btn-ghost">Logout</button>
+        <div class="small" id="loginInfo">Nicht eingeloggt</div>
+      </div>
+
+      <!-- Playlist-Auswahl + URL -->
+      <div class="row row-wrap mt-4">
+        <div class="flex-1 playlist-input-wrapper">
+          <label for="playlistInput">Playlist auswählen oder URL einfügen</label>
+          <input id="playlistInput" type="text" placeholder="Tippe hier oder wähle eine Playlist aus …" />
+          <div id="playlistSuggestions" class="playlist-suggestions"></div>
+        </div>
+      </div>
+
+      <div class="row row-wrap mt-2">
+        <button id="btnInitPlayer" class="btn btn-ghost">Player verbinden</button>
+        <button id="btnLoadPlaylist" class="btn btn-primary">Playlist laden</button>
+        <div class="small" id="playlistInfo"></div>
+      </div>
+
+      <!-- Modus -->
+      <div class="mt-4">
+        <div class="row row-wrap">
+          <div class="mode-toggle" id="modeToggle">
+            <div class="mode-option active" data-mode="noob">
+              Noob
+              <span>Jahrzehnt · ±4 · ±2 · 2000 · Feature</span>
+            </div>
+            <div class="mode-option" data-mode="pro">
+              Pro
+              <span>Künstler · Titel · Album · Jahre ±</span>
+            </div>
+          </div>
+
+          <div style="margin-left:auto;">
+            <label for="durationInput">Abspielzeit (Sek.)</label>
+            <input id="durationInput" type="number" value="30" min="5" max="120" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Steuerung -->
+      <div class="row row-wrap mt-4">
+        <button id="btnStartRound" class="btn btn-primary flex-1">Nächsten Song starten</button>
+        <button id="btnReveal" class="btn btn-ghost">Lösung anzeigen</button>
+        <button id="btnStop" class="btn btn-danger">Stopp</button>
+      </div>
+
+      <div class="status-line mt-3">
+        <div>Song: <span id="roundInfo" class="status-strong">–</span></div>
+        <div>Modus: <span id="modeLabel" class="status-strong">Noob</span></div>
+      </div>
+    </section>
+
+    <!-- RECHTER BLOCK: TIMER / KATEGORIE / FRAGEN / LÖSUNG -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Runde</div>
+          <div class="card-tag">Musik läuft → Antworten → Lösung aufdecken</div>
+        </div>
+      </div>
+
+      <!-- TIMER -->
+      <div class="timer" id="countdownDisplay">00</div>
+
+      <!-- KATEGORIE -->
+      <div class="category-banner mt-3" id="categoryBanner">
+        <div class="category-label">Kategorie dieser Runde</div>
+        <div class="category-value" id="categoryValue">–</div>
+      </div>
+
+      <!-- FRAGENLISTE -->
+      <div class="questions mt-3">
+        <div class="questions-title">Fragen in diesem Modus</div>
+        <ul id="questionsList"></ul>
+      </div>
+
+      <!-- LÖSUNGSKARTE -->
+      <div class="solution-card mt-4 solution-hidden" id="solutionCard">
+        <div class="solution-header">
+          <div>Rundenlösung</div>
+          <div class="pill-small"><span id="trackIndexLabel">–</span></div>
+        </div>
+
+        <div class="solution-main mt-2">
+          <div><strong id="solutionTitle">---</strong></div>
+          <div>von <span id="solutionArtist" class="solution-value">---</span></div>
+        </div>
+
+        <div class="solution-meta mt-2">
+          <div>Album: <span id="solutionAlbum" class="solution-value">---</span></div>
+          <div>Erscheinungsjahr: <span id="solutionYear" class="solution-value">---</span></div>
+          <div>Jahrzehnt: <span id="solutionDecade" class="solution-value">---</span></div>
+          <div>Feature (≥ 2 Artists): <span id="solutionSoloGroup" class="solution-value">---</span></div>
+        </div>
+
+        <div class="solution-hint">Punktevergabe erfolgt analog durch die Spielenden.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>Steuerung: Login → Playlist wählen → Player → Runde → Lösung.</div>
+    <div>Hinweis: Spotify Web Playback funktioniert nur über https:// oder http://localhost.</div>
+  </footer>
+
+</div>
+
+<!-- Spotify Web Playback SDK -->
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+<!-- App -->
+<script src="app.js"></script>
+
+</body>
+</html>
